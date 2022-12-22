@@ -28,6 +28,12 @@ jobs:
       - name: Install npm dependencies
         run: npm ci
 
+      - name: Sonarcloud
+        uses: sonarsource/sonarcloud-github-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Tests
         run: npm run test:integration
 

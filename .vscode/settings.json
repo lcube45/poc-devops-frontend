@@ -1,0 +1,6 @@
+{
+    "sonarlint.connectedMode.project": {
+        "connectionId": "lcube-sonarcloud",
+        "projectKey": "lcube-ng-demo"
+    }
+}

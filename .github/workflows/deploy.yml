@@ -45,4 +45,4 @@ jobs:
       - name: Deploy asset to AWS s3
         run: |
           aws s3 rm s3://${{ env.S3_BUCKET }}/ --recursive
-          aws s3 cp ./release s3://${{ env.S3_BUCKET }}
+          aws s3 cp release s3://${{ env.S3_BUCKET }} --recursive

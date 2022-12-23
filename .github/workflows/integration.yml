@@ -1,6 +1,9 @@
 name: Integration
 
 on:
+  push:
+    branches:
+      - "develop"
   pull_request:
     branches-ignore:
       - "main"
@@ -11,6 +14,7 @@ on:
 
 jobs:
   install-test-analyze:
+    name: Build source
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

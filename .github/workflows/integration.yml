@@ -11,6 +11,7 @@ on:
 
 jobs:
   install-test-analyze:
+    name: Build source
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -41,4 +42,5 @@ jobs:
         uses: EnricoMi/publish-unit-test-result-action@v2
         if: always()
         with:
+          check_name: Test results
           junit_files: "tests/*.xml"

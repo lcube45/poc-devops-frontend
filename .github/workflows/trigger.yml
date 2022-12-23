@@ -1,7 +1,6 @@
 name: Trigger
 on:
-  release:
-    types: [published, created, edited]
+  release
 jobs:
   example:
     name: Example Job

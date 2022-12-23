@@ -1,5 +1,8 @@
 name: Trigger
-on: release
+on:
+  release:
+    type: [edited]
+    branches: [main]
 jobs:
   example:
     name: Example Job

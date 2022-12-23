@@ -26,6 +26,10 @@ jobs:
           latest: true
           fileName: "*.zip"
 
+      - name: Unzip asset release
+        run: |
+          unzip -d release build-${{ steps.download-release-asset.outputs.tag_name }}.zip
+
       - name: Print results
         run: |
           ls -al
@@ -40,4 +44,4 @@ jobs:
 
       - name: Deploy asset to AWS s3
         run: |
-          aws s3 cp ./*.zip s3://${{ env.S3_BUCKET }}
+          aws s3 sync release s3://${{ env.S3_BUCKET }}

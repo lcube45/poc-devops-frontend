@@ -32,11 +32,11 @@ jobs:
           echo "tag ${{ steps.download-release-asset.outputs.tag_name }}"
 
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials
+        uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.AWS_REGION }}
+          aws-region: eu-west-3
 
       - name: Deploy asset to AWS s3
         run: |

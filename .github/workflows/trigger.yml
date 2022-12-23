@@ -1,6 +1,5 @@
 name: Trigger
-on:
-  release
+on: release
 jobs:
   example:
     name: Example Job

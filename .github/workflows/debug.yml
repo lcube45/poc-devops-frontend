@@ -2,7 +2,7 @@ name: Debug
 
 on:
   release:
-    types: [published]
+    types: [created]
 
 jobs:
 

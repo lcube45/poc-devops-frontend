@@ -1,23 +1,16 @@
-name: Debug
-
+name: My First Manual Workflow
 on: [workflow_dispatch]
-
 jobs:
-
-  debug-project:
-
-    name: Debug
+  example:
+    name: Example Job
     runs-on: ubuntu-latest
-
     steps:
-
       - name: Download latest release asset
         id: download-release-asset
         uses: robinraju/release-downloader@v1.7
         with:
           latest: true
           fileName: "*.zip"
-
       - name: Print results
         run: |
           ls -al

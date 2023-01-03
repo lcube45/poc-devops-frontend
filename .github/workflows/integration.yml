@@ -36,20 +36,6 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: Get AWS Parameter value
-        id: get-param
-        run: echo "param=$(aws ssm get-parameter --name /poc-inetum/production/api-url --query "Parameter.Value" --output text)" >> $GITHUB_OUTPUT
-
-      - name: Write environment.prod.ts file
-        uses: DamianReeves/write-file-action@master
-        with:
-          path: ./src/environments/environment.prod.ts
-          contents: |
-            export const environment = {
-              production: true,
-              apiUrl: '${{ steps.get-param.outputs.param }}'
-            };
-
       - name: Login to AWS CodeArtifact
         run: aws codeartifact login --tool npm --repository ${{ secrets.AWS_CODEARTIFACT_REPOSITORY }} --domain ${{ secrets.AWS_CODEARTIFACT_DOMAIN }} --domain-owner ${{ secrets.AWS_ACCOUNT }} --region ${{ secrets.AWS_REGION }}
 

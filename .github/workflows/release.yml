@@ -49,7 +49,7 @@ jobs:
               apiUrl: ${{ steps.get-param.outputs.param }}
             };
 
-      - name: Debug action
+      - name: Debug
         run: |
           pwd
           ls -al

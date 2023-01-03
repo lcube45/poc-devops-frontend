@@ -15,6 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.get-version.outputs.version }}
+      param: ${{ steps.get-param.outputs.param }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -40,12 +41,26 @@ jobs:
       - name: Install npm dependencies
         run: npm ci
 
+      - name: Get AWS Parameter value
+        id: get-param
+        run: echo "param=aws ssm get-parameter --name /poc-inetum/production/api-url --query "Parameter.Value" --output text" >> $GITHUB_OUTPUT
+
+      - name: Write environment.prod.ts file
+        uses: DamianReeves/write-file-action@master
+        with:
+          path: ./src/environments/environment.prod.ts
+          contents: |
+            export const environment = {
+              production: true,
+              apiUrl: ${{ steps.get-param.outputs.param }}
+            };
+
       - name: Get current version
         id: get-version
         run: echo "version=$(npm pkg get version --raw | tr -d \")" >> $GITHUB_OUTPUT
 
       - name: Build artefact
-        run: npm run build
+        run: npm run build --configuration production
 
       - name: Upload artifact
         uses: actions/upload-artifact@v3

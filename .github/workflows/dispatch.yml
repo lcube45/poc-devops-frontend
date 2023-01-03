@@ -1,0 +1,32 @@
+name: Dispatch
+
+on:
+  workflow_dispatch:
+    inputs:
+      text:
+        description: 'Input example'
+        required: true
+      select:
+        description: 'Select example'
+        required: true
+        default: 'warning'
+        type: choice
+        options:
+          - info
+          - warning
+          - debug
+      boolean:
+        description: 'Boolean example'
+        required: true
+        type: boolean
+
+jobs:
+  manually-trigger:
+    name: Trigger
+    runs-on: ubuntu-latest
+    steps:
+      - name: Show input usage in workflow
+        run: |
+          echo ${{ github.event.inputs.text }}
+          echo ${{ github.event.inputs.select }}
+          echo ${{ github.event.inputs.boolean }}

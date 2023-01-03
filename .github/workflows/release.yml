@@ -27,6 +27,16 @@ jobs:
           node-version: 16
           cache: npm
 
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-3
+
+      - name: Login to AWS CodeArtifact
+        run: aws codeartifact login --tool npm --repository poc-inetum --domain velco --domain-owner 825794536530 --region eu-west-3
+
       - name: Install npm dependencies
         run: npm ci
 

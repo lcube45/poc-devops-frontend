@@ -46,7 +46,7 @@ jobs:
           contents: |
             export const environment = {
               production: true,
-              apiUrl: ${{ steps.get-param.outputs.param }}
+              apiUrl: '${{ steps.get-param.outputs.param }}'
             };
 
       - name: Debug

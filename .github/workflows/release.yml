@@ -43,7 +43,7 @@ jobs:
 
       - name: Get AWS Parameter value
         id: get-param
-        run: echo "param=aws ssm get-parameter --name /poc-inetum/production/api-url --query "Parameter.Value" --output text" >> $GITHUB_OUTPUT
+        run: echo "param=$(aws ssm get-parameter --name /poc-inetum/production/api-url --query "Parameter.Value" --output text)" >> $GITHUB_OUTPUT
 
       - name: Write environment.prod.ts file
         uses: DamianReeves/write-file-action@master
@@ -60,7 +60,7 @@ jobs:
         run: echo "version=$(npm pkg get version --raw | tr -d \")" >> $GITHUB_OUTPUT
 
       - name: Build artefact
-        run: npm run build --configuration production
+        run: npm run build
 
       - name: Upload artifact
         uses: actions/upload-artifact@v3

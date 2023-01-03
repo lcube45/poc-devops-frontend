@@ -49,8 +49,7 @@ jobs:
               apiUrl: ${{ steps.get-param.outputs.param }}
             };
 
-      - name: Get current version
-        id: get-version
+      - name: Debug action
         run: |
           pwd
           ls -al

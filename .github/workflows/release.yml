@@ -5,7 +5,7 @@ on:
     branches:
       - 'main'
     paths-ignore:
-      #- '.github/**/*.yml'
+      - '.github/**/*.yml'
       - '.gitignore'
 
 jobs:
@@ -16,7 +16,9 @@ jobs:
     outputs:
       version: ${{ steps.get-version.outputs.version }}
       param: ${{ steps.get-param.outputs.param }}
+
     steps:
+
       - name: Checkout code
         uses: actions/checkout@v3
         with:
@@ -33,7 +35,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: eu-west-3
+          aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Get AWS Parameter value
         id: get-param
@@ -49,18 +51,12 @@ jobs:
               apiUrl: '${{ steps.get-param.outputs.param }}'
             };
 
-      - name: Debug
-        run: |
-          pwd
-          ls -al
-          ls -al ./src/environments
-
       - name: Get current version
         id: get-version
         run: echo "version=$(npm pkg get version --raw | tr -d \")" >> $GITHUB_OUTPUT
 
       - name: Login to AWS CodeArtifact
-        run: aws codeartifact login --tool npm --repository poc-inetum --domain velco --domain-owner 825794536530 --region eu-west-3
+        run: aws codeartifact login --tool npm --repository ${{ secrets.AWS_CODEARTIFACT_REPOSITORY }} --domain ${{ secrets.AWS_CODEARTIFACT_DOMAIN }} --domain-owner ${{ secrets.AWS_ACCOUNT }} --region ${{ secrets.AWS_REGION }}
 
       - name: Install npm dependencies
         run: npm ci
@@ -106,11 +102,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: release-project
 
-    env:
-      S3_BUCKET: 'poc-devops-frontend'
-      CDN_DISTRIBUTION_ID: 'E2SZRISXTY5W0O'
-      AWS_REGION: 'eu-west-3'
-
     steps:
 
       - name: Download latest release asset
@@ -120,24 +111,19 @@ jobs:
           latest: true
           fileName: "*.zip"
 
-      - name: Unzip asset release
+      - name: Unzip latest release asset
         run: |
           unzip -d release build-${{ steps.download-release-asset.outputs.tag_name }}.zip
-
-      - name: Print results
-        run: |
-          ls -al
-          echo "tag ${{ steps.download-release-asset.outputs.tag_name }}"
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: eu-west-3
+          aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Deploy asset to AWS s3
         run: |
-          aws s3 rm s3://${{ env.S3_BUCKET }}/ --recursive
-          aws s3 cp release s3://${{ env.S3_BUCKET }} --recursive
-          aws cloudfront create-invalidation --distribution-id ${{ env.CDN_DISTRIBUTION_ID }} --paths "/*"
+          aws s3 rm s3://${{ secrets.AWS_S3_BUCKET }}/ --recursive
+          aws s3 cp release s3://${{ secrets.AWS_S3_BUCKET }} --recursive
+          aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_CDN_DISTRIBUTION_ID }} --paths "/*"

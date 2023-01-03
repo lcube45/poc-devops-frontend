@@ -8,7 +8,7 @@
     "build:integration": "ng build --optimization",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "test:integration": "ng test --browsers=ChromeHeadless --watch=false --code-coverage"
+    "test:integration": "ng test --browsers=ChromeHeadless --watch=false --code-coverage --configuration=development"
   },
   "private": true,
   "dependencies": {
